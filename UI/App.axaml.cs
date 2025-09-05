@@ -18,9 +18,9 @@ public partial class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            desktop.MainWindow = new LoginWindow
+            desktop.MainWindow = new MainWindow
             {
-                DataContext = new LoginViewModel()
+                DataContext = new MainViewModel()
             };
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)

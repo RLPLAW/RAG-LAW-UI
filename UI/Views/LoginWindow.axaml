@@ -15,7 +15,7 @@
 		ExtendClientAreaToDecorationsHint="True">
 	<Window.Resources>
 		<!-- Input Field Styles -->
-		<Style x:Key="LoginTextBoxStyle" TargetType="TextBox">
+		<Style Selector="TextBox.LoginTextBox" x:Key="LoginTextBoxStyle">
 			<Setter Property="Background" Value="#2D2D2D"/>
 			<Setter Property="Foreground" Value="White"/>
 			<Setter Property="BorderBrush" Value="#404040"/>
@@ -24,10 +24,9 @@
 			<Setter Property="FontFamily" Value="Segoe UI"/>
 			<Setter Property="Padding" Value="16,12"/>
 			<Setter Property="Height" Value="48"/>
-			<Setter Property="CornerRadius" Value="8"/>
 		</Style>
 
-		<Style x:Key="LoginPasswordBoxStyle" TargetType="TextBox">
+		<Style Selector="TextBox.LoginPasswordBox" x:Key="LoginPasswordBoxStyle">
 			<Setter Property="Background" Value="#2D2D2D"/>
 			<Setter Property="Foreground" Value="White"/>
 			<Setter Property="BorderBrush" Value="#404040"/>
@@ -36,12 +35,11 @@
 			<Setter Property="FontFamily" Value="Segoe UI"/>
 			<Setter Property="Padding" Value="16,12"/>
 			<Setter Property="Height" Value="48"/>
-			<Setter Property="CornerRadius" Value="8"/>
 			<Setter Property="PasswordChar" Value="*"/>
 		</Style>
 
 		<!-- Button Styles -->
-		<Style x:Key="PrimaryButtonStyle" TargetType="Button">
+		<Style Selector="Button.PrimaryButton" x:Key="PrimaryButtonStyle">
 			<Setter Property="Background" Value="#10A37F"/>
 			<Setter Property="Foreground" Value="White"/>
 			<Setter Property="BorderThickness" Value="0"/>
@@ -50,11 +48,11 @@
 			<Setter Property="FontFamily" Value="Segoe UI"/>
 			<Setter Property="Height" Value="48"/>
 			<Setter Property="Cursor" Value="Hand"/>
-			<Setter Property="CornerRadius" Value="8"/>
 			<Setter Property="Padding" Value="24,12"/>
+			<Setter Property="CornerRadius" Value="6"/>
 		</Style>
 
-		<Style x:Key="SecondaryButtonStyle" TargetType="Button">
+		<Style Selector="Button.SecondaryButton" x:Key="SecondaryButtonStyle">
 			<Setter Property="Background" Value="Transparent"/>
 			<Setter Property="Foreground" Value="#B0B0B0"/>
 			<Setter Property="BorderBrush" Value="#404040"/>
@@ -63,33 +61,31 @@
 			<Setter Property="FontFamily" Value="Segoe UI"/>
 			<Setter Property="Height" Value="48"/>
 			<Setter Property="Cursor" Value="Hand"/>
-			<Setter Property="CornerRadius" Value="8"/>
 			<Setter Property="Padding" Value="24,12"/>
+			<Setter Property="CornerRadius" Value="6"/>
 		</Style>
 
-		<Style x:Key="LinkButtonStyle" TargetType="Button">
+		<Style Selector="Button.LinkButton" x:Key="LinkButtonStyle">
 			<Setter Property="Background" Value="Transparent"/>
 			<Setter Property="Foreground" Value="#10A37F"/>
 			<Setter Property="BorderThickness" Value="0"/>
 			<Setter Property="FontSize" Value="13"/>
 			<Setter Property="FontFamily" Value="Segoe UI"/>
 			<Setter Property="Cursor" Value="Hand"/>
-			<Setter Property="Padding" Value="4"/>
 		</Style>
 
 		<!-- Close Button Style -->
-		<Style x:Key="CloseButtonStyle" TargetType="Button">
+		<Style Selector="Button.CloseButton" x:Key="CloseButtonStyle">
 			<Setter Property="Background" Value="Transparent"/>
 			<Setter Property="Foreground" Value="#888888"/>
 			<Setter Property="BorderThickness" Value="0"/>
 			<Setter Property="Width" Value="32"/>
 			<Setter Property="Height" Value="32"/>
 			<Setter Property="Cursor" Value="Hand"/>
-			<Setter Property="CornerRadius" Value="4"/>
 		</Style>
 
 		<!-- CheckBox Style -->
-		<Style x:Key="CustomCheckBoxStyle" TargetType="CheckBox">
+		<Style Selector="CheckBox.CustomCheckBox" x:Key="CustomCheckBoxStyle">
 			<Setter Property="Foreground" Value="#B0B0B0"/>
 			<Setter Property="FontSize" Value="13"/>
 			<Setter Property="FontFamily" Value="Segoe UI"/>
@@ -112,11 +108,11 @@
 			<Grid Grid.Row="0"
 				  Background="Transparent">
 				<Button x:Name="CloseButton"
-						Style="{StaticResource CloseButtonStyle}"
+						Classes="CloseButton"
 						HorizontalAlignment="Right"
 						VerticalAlignment="Center"
 						Margin="0,4,8,4"
-						Click="CloseButton_Click">
+						Click="btnCloseButton_Click">
 					<Path Fill="#888888"
 						  Data="M18.3 5.71a.996.996 0 00-1.41 0L12 10.59 7.11 5.7A.996.996 0 005.7 7.11L10.59 12 5.7 16.89a.996.996 0 101.41 1.41L12 13.41l4.89 4.89a.996.996 0 001.41-1.41L13.41 12l4.89-4.89c.38-.38.38-1.02 0-1.4z"/>
 				</Button>
@@ -156,7 +152,7 @@
 								   HorizontalAlignment="Center"
 								   Margin="0,0,0,8"/>
 
-						<TextBlock Text="Sign in to your Angler Law Assistant account"
+						<TextBlock Text="Sign in to your RAG Assistant account"
 								   Foreground="#B0B0B0"
 								   FontSize="14"
 								   HorizontalAlignment="Center"
@@ -174,7 +170,7 @@
 									   FontWeight="Medium"
 									   Margin="0,0,0,8"/>
 							<TextBox x:Name="txtUsername"
-									 Style="{StaticResource LoginTextBoxStyle}"
+									 Classes="LoginTextBox"
 									 Watermark="Enter your username"/>
 						</StackPanel>
 
@@ -186,21 +182,22 @@
 									   FontWeight="Medium"
 									   Margin="0,0,0,8"/>
 							<TextBox x:Name="txtPassword"
-									 Style="{StaticResource LoginPasswordBoxStyle}"
+									 Classes="LoginPasswordBox"
 									 Watermark="Enter your password"/>
 						</StackPanel>
 
 						<!-- Remember Me -->
-						<CheckBox x:Name="chkRememberMe" Content="Remember me"
-								  Style="{StaticResource CustomCheckBoxStyle}"
+						<CheckBox x:Name="chkRememberMe"
+								  Content="Remember me"
+								  Classes="CustomCheckBox"
 								  Margin="0,0,0,24"/>
 
 						<!-- Sign In Button -->
 						<Button x:Name="btnSignIn"
 								Content="Sign In"
-								Style="{StaticResource PrimaryButtonStyle}"
+								Classes="PrimaryButton"
 								Margin="0,0,0,16"
-								Click="SignIn_Click"/>
+								Click="btnSignIn_Click"/>
 
 						<!-- Divider -->
 						<Grid Margin="0,16,0,16">
@@ -218,16 +215,16 @@
 						<!-- Sign Up Button -->
 						<Button x:Name="btnSignUp"
 								Content="Sign Up"
-								Style="{StaticResource SecondaryButtonStyle}"
-								Click="SignUp_Click"/>
+								Classes="SecondaryButton"
+								Click="btnSignUp_Click"/>
 
 						<!-- Forgot Password Link -->
 						<Button x:Name="btnForgotPassword"
 								Content="Forgot your password?"
-								Style="{StaticResource LinkButtonStyle}"
+								Classes="LinkButton"
 								HorizontalAlignment="Center"
 								Margin="0,16,0,0"
-								Click="ForgotPassword_Click"/>
+								Click="btnForgotPassword_Click"/>
 					</StackPanel>
 				</Grid>
 			</ScrollViewer>

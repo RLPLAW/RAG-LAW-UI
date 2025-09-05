@@ -1,29 +1,47 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFramework>net8.0-ios</TargetFramework>
-		<RuntimeIdentifier>iossimulator-x64</RuntimeIdentifier>
-		<Nullable>enable</Nullable>
-		<LangVersion>latest</LangVersion>
-	</PropertyGroup>
+  <PropertyGroup>
+	<TargetFrameworks>net8.0;net8.0-ios17.0</TargetFrameworks>
+	<Nullable>enable</Nullable>
+	<LangVersion>latest</LangVersion>
+  </PropertyGroup>
 
-	<ItemGroup>
-		<AvaloniaResource Include="Assets\**" />
-	</ItemGroup>
+  <ItemGroup>
+	<AvaloniaResource Include="Assets\**" />
+  </ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="Avalonia" Version="11.3.5" />
-		<PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)" />
-		<PackageReference Include="Avalonia.Fonts.Inter" Version="$(AvaloniaVersion)" />
-		<PackageReference Include="Avalonia.ReactiveUI" Version="$(AvaloniaVersion)" />
-		<PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)" />
-		<PackageReference Include="Avalonia.iOS" Version="$(AvaloniaVersion)" />
-		<PackageReference Include="MessageBox.Avalonia" Version="3.2.0" />
-	</ItemGroup>
+  <!-- iOS-only packages -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0-ios17.0'">
+	<PackageReference Include="Avalonia.iOS" Version="11.3.5" />
+  </ItemGroup>
+	  
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net8.0-ios17.0'">
+	<RuntimeIdentifier>iossimulator-x64</RuntimeIdentifier>
+  </PropertyGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\BusinessObjects\BusinessObjects.csproj" />
-		<ProjectReference Include="..\Services\Services.csproj" />
-	</ItemGroup>
+  <!-- Desktop-only packages -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
+	<PackageReference Include="Avalonia" Version="11.3.5" />
+	<PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.5" />
+	<PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.5" />
+	<PackageReference Include="Avalonia.ReactiveUI" Version="11.3.5" />
+	<PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+	<ProjectReference Include="..\BusinessObjects\BusinessObjects.csproj" />
+	<ProjectReference Include="..\Services\Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup />
+
+  <ItemGroup />
+
+  <ItemGroup />
+
+  <ItemGroup>
+	<PackageReference Include="MessageBox.Avalonia" Version="3.2.0" />
+	<PackageReference Include="ReactiveUI" Version="21.0.1" />
+  </ItemGroup>
 
 </Project>

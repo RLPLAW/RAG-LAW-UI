@@ -6,6 +6,10 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using BusinessObjects;
+// Ensure you have the correct NuGet package installed for MessageBox.Avalonia.
+// You need to install the "MessageBox.Avalonia" package in your project.
+// To do this, use the NuGet Package Manager in Visual Studio or run the following command in the Package Manager Console:
+// Install-Package MessageBox.Avalonia
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 using Services;
@@ -58,6 +62,16 @@ public partial class LoginWindow : Window
                 await ShowErrorMessage("User created successfully! You can now sign in.", "Sign Up Successful");
             }
         }
+    }
+
+    private void btnCloseButton_Click(object sender, RoutedEventArgs e)
+    {
+        this.Close();
+    }
+
+    private void btnForgotPassword_Click(object sender, RoutedEventArgs e)
+    {
+        // Implement forgot password functionality here
     }
     private async System.Threading.Tasks.Task ShowErrorMessage(string message, string title)
     {

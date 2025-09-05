@@ -1,16 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net8.0-ios</TargetFramework>
-    <SupportedOSPlatformVersion>13.0</SupportedOSPlatformVersion>
-    <Nullable>enable</Nullable>
+	<OutputType>Exe</OutputType>
+	<TargetFramework>net8.0-ios</TargetFramework>
+	<SupportedOSPlatformVersion>13.0</SupportedOSPlatformVersion>
+	<Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Avalonia.iOS" Version="$(AvaloniaVersion)" />
-  </ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0-ios17.0'">
+		<PackageReference Include="Avalonia.iOS" Version="11.3.5" />
+	</ItemGroup>
+
 
   <ItemGroup>
-    <ProjectReference Include="..\UI\UI.csproj" />
+	<ProjectReference Include="..\UI\UI.csproj" />
   </ItemGroup>
 </Project>
