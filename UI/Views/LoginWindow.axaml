@@ -1,0 +1,236 @@
+<Window xmlns="https://github.com/avaloniaui"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+		x:Class="UI.LoginWindow"
+		Title="Sign In - RAG Assistant"
+		Height="600"
+		Width="450"
+		Background="#1E1E1E"
+		CanResize="False"
+		WindowStartupLocation="CenterScreen"
+		SystemDecorations="None"
+		TransparencyLevelHint="AcrylicBlur"
+		ExtendClientAreaToDecorationsHint="True">
+	<Window.Resources>
+		<!-- Input Field Styles -->
+		<Style x:Key="LoginTextBoxStyle" TargetType="TextBox">
+			<Setter Property="Background" Value="#2D2D2D"/>
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="BorderBrush" Value="#404040"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="FontSize" Value="14"/>
+			<Setter Property="FontFamily" Value="Segoe UI"/>
+			<Setter Property="Padding" Value="16,12"/>
+			<Setter Property="Height" Value="48"/>
+			<Setter Property="CornerRadius" Value="8"/>
+		</Style>
+
+		<Style x:Key="LoginPasswordBoxStyle" TargetType="TextBox">
+			<Setter Property="Background" Value="#2D2D2D"/>
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="BorderBrush" Value="#404040"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="FontSize" Value="14"/>
+			<Setter Property="FontFamily" Value="Segoe UI"/>
+			<Setter Property="Padding" Value="16,12"/>
+			<Setter Property="Height" Value="48"/>
+			<Setter Property="CornerRadius" Value="8"/>
+			<Setter Property="PasswordChar" Value="*"/>
+		</Style>
+
+		<!-- Button Styles -->
+		<Style x:Key="PrimaryButtonStyle" TargetType="Button">
+			<Setter Property="Background" Value="#10A37F"/>
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="BorderThickness" Value="0"/>
+			<Setter Property="FontSize" Value="14"/>
+			<Setter Property="FontWeight" Value="Medium"/>
+			<Setter Property="FontFamily" Value="Segoe UI"/>
+			<Setter Property="Height" Value="48"/>
+			<Setter Property="Cursor" Value="Hand"/>
+			<Setter Property="CornerRadius" Value="8"/>
+			<Setter Property="Padding" Value="24,12"/>
+		</Style>
+
+		<Style x:Key="SecondaryButtonStyle" TargetType="Button">
+			<Setter Property="Background" Value="Transparent"/>
+			<Setter Property="Foreground" Value="#B0B0B0"/>
+			<Setter Property="BorderBrush" Value="#404040"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="FontSize" Value="14"/>
+			<Setter Property="FontFamily" Value="Segoe UI"/>
+			<Setter Property="Height" Value="48"/>
+			<Setter Property="Cursor" Value="Hand"/>
+			<Setter Property="CornerRadius" Value="8"/>
+			<Setter Property="Padding" Value="24,12"/>
+		</Style>
+
+		<Style x:Key="LinkButtonStyle" TargetType="Button">
+			<Setter Property="Background" Value="Transparent"/>
+			<Setter Property="Foreground" Value="#10A37F"/>
+			<Setter Property="BorderThickness" Value="0"/>
+			<Setter Property="FontSize" Value="13"/>
+			<Setter Property="FontFamily" Value="Segoe UI"/>
+			<Setter Property="Cursor" Value="Hand"/>
+			<Setter Property="Padding" Value="4"/>
+		</Style>
+
+		<!-- Close Button Style -->
+		<Style x:Key="CloseButtonStyle" TargetType="Button">
+			<Setter Property="Background" Value="Transparent"/>
+			<Setter Property="Foreground" Value="#888888"/>
+			<Setter Property="BorderThickness" Value="0"/>
+			<Setter Property="Width" Value="32"/>
+			<Setter Property="Height" Value="32"/>
+			<Setter Property="Cursor" Value="Hand"/>
+			<Setter Property="CornerRadius" Value="4"/>
+		</Style>
+
+		<!-- CheckBox Style -->
+		<Style x:Key="CustomCheckBoxStyle" TargetType="CheckBox">
+			<Setter Property="Foreground" Value="#B0B0B0"/>
+			<Setter Property="FontSize" Value="13"/>
+			<Setter Property="FontFamily" Value="Segoe UI"/>
+		</Style>
+	</Window.Resources>
+
+	<Border Background="#1E1E1E"
+			CornerRadius="12"
+			BorderBrush="#2D2D2D"
+			BorderThickness="1">
+		<Grid>
+			<Grid.RowDefinitions>
+				<!-- Title Bar -->
+				<RowDefinition Height="40"/>
+				<!-- Content -->
+				<RowDefinition Height="*"/>
+			</Grid.RowDefinitions>
+
+			<!-- Custom Title Bar -->
+			<Grid Grid.Row="0"
+				  Background="Transparent">
+				<Button x:Name="CloseButton"
+						Style="{StaticResource CloseButtonStyle}"
+						HorizontalAlignment="Right"
+						VerticalAlignment="Center"
+						Margin="0,4,8,4"
+						Click="CloseButton_Click">
+					<Path Fill="#888888"
+						  Data="M18.3 5.71a.996.996 0 00-1.41 0L12 10.59 7.11 5.7A.996.996 0 005.7 7.11L10.59 12 5.7 16.89a.996.996 0 101.41 1.41L12 13.41l4.89 4.89a.996.996 0 001.41-1.41L13.41 12l4.89-4.89c.38-.38.38-1.02 0-1.4z"/>
+				</Button>
+			</Grid>
+
+			<!-- Main Content -->
+			<ScrollViewer Grid.Row="1"
+						  VerticalScrollBarVisibility="Auto"
+						  HorizontalScrollBarVisibility="Disabled">
+				<Grid Margin="48,20,48,48">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
+
+					<!-- Header Section -->
+					<StackPanel Grid.Row="0" HorizontalAlignment="Center" Margin="0,20,0,40">
+						<!-- Logo/Icon -->
+						<Border Width="60"
+								Height="60"
+								Background="#10A37F"
+								CornerRadius="12"
+								Margin="0,0,0,24">
+							<TextBlock Text="AI"
+									   Foreground="White"
+									   FontSize="24"
+									   FontWeight="Bold"
+									   HorizontalAlignment="Center"
+									   VerticalAlignment="Center"/>
+						</Border>
+
+						<!-- Welcome Text -->
+						<TextBlock Text="Welcome back"
+								   Foreground="White"
+								   FontSize="28"
+								   FontWeight="Medium"
+								   HorizontalAlignment="Center"
+								   Margin="0,0,0,8"/>
+
+						<TextBlock Text="Sign in to your Angler Law Assistant account"
+								   Foreground="#B0B0B0"
+								   FontSize="14"
+								   HorizontalAlignment="Center"
+								   TextWrapping="Wrap"/>
+					</StackPanel>
+
+					<!-- Login Form -->
+					<StackPanel Grid.Row="1" MaxWidth="320" HorizontalAlignment="Center">
+
+						<!-- Username Field -->
+						<StackPanel Margin="0,0,0,20">
+							<TextBlock Text="Username"
+									   Foreground="White"
+									   FontSize="13"
+									   FontWeight="Medium"
+									   Margin="0,0,0,8"/>
+							<TextBox x:Name="txtUsername"
+									 Style="{StaticResource LoginTextBoxStyle}"
+									 Watermark="Enter your username"/>
+						</StackPanel>
+
+						<!-- Password Field -->
+						<StackPanel Margin="0,0,0,20">
+							<TextBlock Text="Password"
+									   Foreground="White"
+									   FontSize="13"
+									   FontWeight="Medium"
+									   Margin="0,0,0,8"/>
+							<TextBox x:Name="txtPassword"
+									 Style="{StaticResource LoginPasswordBoxStyle}"
+									 Watermark="Enter your password"/>
+						</StackPanel>
+
+						<!-- Remember Me -->
+						<CheckBox x:Name="chkRememberMe" Content="Remember me"
+								  Style="{StaticResource CustomCheckBoxStyle}"
+								  Margin="0,0,0,24"/>
+
+						<!-- Sign In Button -->
+						<Button x:Name="btnSignIn"
+								Content="Sign In"
+								Style="{StaticResource PrimaryButtonStyle}"
+								Margin="0,0,0,16"
+								Click="SignIn_Click"/>
+
+						<!-- Divider -->
+						<Grid Margin="0,16,0,16">
+							<Rectangle Height="1"
+									   Fill="#404040"/>
+							<Border Background="#1E1E1E"
+									Padding="16,0"
+									HorizontalAlignment="Center">
+								<TextBlock Text="or"
+										   Foreground="#888888"
+										   FontSize="13"/>
+							</Border>
+						</Grid>
+
+						<!-- Sign Up Button -->
+						<Button x:Name="btnSignUp"
+								Content="Sign Up"
+								Style="{StaticResource SecondaryButtonStyle}"
+								Click="SignUp_Click"/>
+
+						<!-- Forgot Password Link -->
+						<Button x:Name="btnForgotPassword"
+								Content="Forgot your password?"
+								Style="{StaticResource LinkButtonStyle}"
+								HorizontalAlignment="Center"
+								Margin="0,16,0,0"
+								Click="ForgotPassword_Click"/>
+					</StackPanel>
+				</Grid>
+			</ScrollViewer>
+		</Grid>
+	</Border>
+</Window>
