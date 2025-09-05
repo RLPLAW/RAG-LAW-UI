@@ -16,4 +16,10 @@
   <ItemGroup>
     <ProjectReference Include="..\UI\UI.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Program.cs">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Compile>
+  </ItemGroup>
 </Project>
