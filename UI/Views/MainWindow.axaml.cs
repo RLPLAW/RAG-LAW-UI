@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.ComponentModel;
+using System.Text;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -6,10 +8,9 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
+using Avalonia.Threading;
 using BusinessObjects;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using System.ComponentModel;
 
 namespace UI.Views
 {
@@ -19,7 +20,7 @@ namespace UI.Views
         private char _userAvatarChar = 'U';
         private const string DefaultMessageInputText = "Type your message here...";
         private bool _isProcessingMessage = false;
-        
+
         public MainWindow()
         {
             InitializeComponent();
@@ -95,7 +96,6 @@ namespace UI.Views
                 AddUserMessage(message);
 
                 txtbMessageInput.Text = string.Empty;
-                SetPlaceholderText();
 
                 var typingIndicator = ShowTypingIndicator();
 
@@ -122,22 +122,27 @@ namespace UI.Views
                 Margin = new Thickness(0, 16, 0, 0)
             };
 
-            var messageBubble = new Border();
-            if (this.TryFindResource("UserMessageBubble", out var userBubbleStyle) && userBubbleStyle is Style style)
+            var messageBubble = new Border
             {
-                messageBubble.Styles.Add(style);
-            }
+                Background = new SolidColorBrush(Color.FromRgb(0, 123, 255)), //Blue
+                CornerRadius = new CornerRadius(15),
+                Padding = new Thickness(12, 8),
+                Margin = new Thickness(0, 0, 8, 0),
+                MaxWidth = 300
+            };
 
-            var messageText = new TextBlock { Text = message };
-            if (this.TryFindResource("MessageTextStyle", out var textStyle) && textStyle is Style textStyleCast)
+            var messageText = new TextBlock
             {
-                messageText.Styles.Add(textStyleCast);
-            }
+                Text = message,
+                Foreground = Brushes.White,
+                TextWrapping = TextWrapping.Wrap,
+                FontSize = 14
+            };
 
             messageBubble.Child = messageText;
             userMessagePanel.Children.Add(messageBubble);
 
-            var userAvatar = CreateAvatar(_userAvatarChar.ToString());
+            var userAvatar = CreateAvatar(_userAvatarChar.ToString(), Brushes.Blue);
             userMessagePanel.Children.Add(userAvatar);
 
             spMessages.Children.Add(userMessagePanel);
@@ -146,20 +151,32 @@ namespace UI.Views
 
         private StackPanel ShowTypingIndicator()
         {
-            var typingBubble = new Border();
-            if (this.TryFindResource("TypingIndicatorBubble", out var typingStyle) && typingStyle is Style style)
+            var typingBubble = new Border
             {
-                typingBubble.Styles.Add(style);
-            }
+                Background = new SolidColorBrush(Color.FromRgb(240, 240, 240)),
+                CornerRadius = new CornerRadius(15),
+                Padding = new Thickness(12, 8),
+                Margin = new Thickness(8, 0, 0, 0)
+            };
+
+            var typingText = new TextBlock
+            {
+                Text = "AI is typing...",
+                Foreground = Brushes.Gray,
+                FontStyle = FontStyle.Italic,
+                FontSize = 14
+            };
+
+            typingBubble.Child = typingText;
 
             var typingStack = new StackPanel
             {
                 Orientation = Orientation.Horizontal,
                 HorizontalAlignment = HorizontalAlignment.Left,
-                Margin = new Thickness(0, 0, 0, 16)
+                Margin = new Thickness(0, 16, 0, 0)
             };
 
-            typingStack.Children.Add(CreateAvatar("AI"));
+            typingStack.Children.Add(CreateAvatar("AI", Brushes.Green));
             typingStack.Children.Add(typingBubble);
 
             spMessages.Children.Add(typingStack);
@@ -182,22 +199,27 @@ namespace UI.Views
             {
                 Orientation = Orientation.Horizontal,
                 HorizontalAlignment = HorizontalAlignment.Left,
-                Margin = new Thickness(0, 0, 0, 16)
+                Margin = new Thickness(0, 16, 0, 0)
             };
 
-            botMessagePanel.Children.Add(CreateAvatar("AI"));
+            botMessagePanel.Children.Add(CreateAvatar("AI", Brushes.Green));
 
-            var messageBubble = new Border();
-            if (this.TryFindResource("AssistantMessageBubble", out var botBubbleStyle) && botBubbleStyle is Style style)
+            var messageBubble = new Border
             {
-                messageBubble.Styles.Add(style);
-            }
+                Background = new SolidColorBrush(Color.FromRgb(240, 240, 240)), // Light gray background
+                CornerRadius = new CornerRadius(15),
+                Padding = new Thickness(12, 8),
+                Margin = new Thickness(8, 0, 0, 0),
+                MaxWidth = 300
+            };
 
-            var messageText = new TextBlock { Text = message };
-            if (this.TryFindResource("MessageTextStyle", out var textStyle) && textStyle is Style textStyleCast)
+            var messageText = new TextBlock
             {
-                messageText.Styles.Add(textStyleCast);
-            }
+                Text = message,
+                Foreground = Brushes.Black,
+                TextWrapping = TextWrapping.Wrap,
+                FontSize = 14
+            };
 
             messageBubble.Child = messageText;
             botMessagePanel.Children.Add(messageBubble);
@@ -206,13 +228,16 @@ namespace UI.Views
             ScrollToEnd();
         }
 
-        private Border CreateAvatar(string text)
+        private Border CreateAvatar(string text, IBrush backgroundColor)
         {
-            var avatar = new Border();
-            if (this.TryFindResource("AvatarStyle", out var avatarStyle) && avatarStyle is Style style)
+            var avatar = new Border
             {
-                avatar.Styles.Add(style);
-            }
+                Background = backgroundColor,
+                CornerRadius = new CornerRadius(20),
+                Width = 40,
+                Height = 40,
+                Margin = new Thickness(4)
+            };
 
             avatar.Child = new TextBlock
             {
@@ -221,7 +246,7 @@ namespace UI.Views
                 FontWeight = FontWeight.Bold,
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
-                FontSize = 12
+                FontSize = 14
             };
 
             return avatar;
@@ -229,7 +254,11 @@ namespace UI.Views
 
         private void ScrollToEnd()
         {
-            svChat?.ScrollToEnd();
+            // Use Dispatcher to ensure UI updates are complete before scrolling
+            Dispatcher.UIThread.Post(() =>
+            {
+                svChat?.ScrollToEnd();
+            }, Avalonia.Threading.DispatcherPriority.Render);
         }
 
         private async Task<string> RetrieveAnswerAsync(string userMessage)
@@ -249,7 +278,7 @@ namespace UI.Views
             if (txtbMessageInput.Text == DefaultMessageInputText)
             {
                 txtbMessageInput.Text = string.Empty;
-                txtbMessageInput.Foreground = Brushes.Black; // Reset to normal color
+                txtbMessageInput.Foreground = Brushes.Gray;
             }
         }
 
