@@ -17,8 +17,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI", "UI\UI.csproj", "{5B28
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI.Desktop", "UI.Desktop\UI.Desktop.csproj", "{58EB4809-2CB9-7AD3-6E94-4E1C91CEDAE8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI.iOS", "UI.iOS\UI.iOS.csproj", "{A0B23CE3-D728-0470-4393-183F640D07A9}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,12 +51,6 @@ Global
 		{58EB4809-2CB9-7AD3-6E94-4E1C91CEDAE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58EB4809-2CB9-7AD3-6E94-4E1C91CEDAE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{58EB4809-2CB9-7AD3-6E94-4E1C91CEDAE8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A0B23CE3-D728-0470-4393-183F640D07A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A0B23CE3-D728-0470-4393-183F640D07A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A0B23CE3-D728-0470-4393-183F640D07A9}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{A0B23CE3-D728-0470-4393-183F640D07A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A0B23CE3-D728-0470-4393-183F640D07A9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A0B23CE3-D728-0470-4393-183F640D07A9}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -6,6 +6,6 @@
 
 	<!-- "Default" follows system theme; you can force "Dark" or "Light" -->
 	<Application.Styles>
-		<fluent:FluentTheme Mode="Dark"/>
+		<FluentTheme />
 	</Application.Styles>
 </Application>

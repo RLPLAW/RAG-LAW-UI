@@ -4,18 +4,19 @@ using Avalonia.ReactiveUI;
 
 using Foundation;
 
-namespace UI.iOS;
+namespace UI.iOS {
 
 // The UIApplicationDelegate for the application. This class is responsible for launching the 
 // User Interface of the application, as well as listening (and optionally responding) to 
 // application events from iOS.
-[Register("AppDelegate")]
-public partial class AppDelegate : AvaloniaAppDelegate<App>
-{
-    protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
+    [Register("AppDelegate")]
+    public partial class AppDelegate : AvaloniaAppDelegate<App>
     {
-        return base.CustomizeAppBuilder(builder)
-            .WithInterFont()
-            .UseReactiveUI();
+        protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
+        {
+            return base.CustomizeAppBuilder(builder)
+                .WithInterFont()
+                .UseReactiveUI();
+        }
     }
 }
