@@ -10,6 +10,14 @@
   </PropertyGroup>
   <ItemGroup>
 	<PackageReference Include="Avalonia.Desktop" Version="11.2.0" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.8">
+	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  <PrivateAssets>all</PrivateAssets>
+	</PackageReference>
+	<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.8" />
+	<PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.8" />
+	<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.8" />
+	<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.8" />
 	<PackageReference Include="Splat" Version="15.1.1" />
 	<PackageReference Include="ReactiveUI" Version="20.1.1" />
   </ItemGroup>
@@ -22,5 +30,11 @@
 	<Compile Update="Program.cs">
 	  <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	</Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+	<None Update="appsettings.json">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
   </ItemGroup>
 </Project>

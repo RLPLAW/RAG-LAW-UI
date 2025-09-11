@@ -168,7 +168,7 @@
 				</StackPanel>
 
 				<ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="8,0">
-					<StackPanel>
+					<StackPanel x:Name="spConversations">
 						<TextBlock Text="Recent Conversations"
 								   Foreground="#B0B0B0"
 								   FontSize="12"
@@ -177,11 +177,11 @@
 
 						<Border Classes="ConversationItemStyle" Background="#2A2A2A">
 							<StackPanel>
-								<TextBlock Text="How to implement RAG?"
+								<TextBlock x:Name="txtQuestionTab" Text="How to implement RAG?"
 										   Foreground="White"
 										   FontSize="13"
 										   TextTrimming="CharacterEllipsis"/>
-								<TextBlock Text="2 hours ago"
+								<TextBlock x:Name="txtTime" Text="2 hours ago"
 										   Foreground="#888888"
 										   FontSize="11"
 										   Margin="0,2,0,0"/>

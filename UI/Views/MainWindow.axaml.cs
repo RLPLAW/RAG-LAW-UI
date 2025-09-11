@@ -1,4 +1,7 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Avalonia;
@@ -10,7 +13,9 @@ using Avalonia.Media;
 using Avalonia.Styling;
 using Avalonia.Threading;
 using BusinessObjects;
+using DynamicData;
 using Microsoft.IdentityModel.Tokens;
+using Services;
 
 namespace UI.Views
 {
@@ -20,11 +25,14 @@ namespace UI.Views
         private char _userAvatarChar = 'U';
         private const string DefaultMessageInputText = "Type your message here...";
         private bool _isProcessingMessage = false;
+        private List<Conversation> conversations = new List<Conversation>();
+        private ConversationService conversationService = new ConversationService();
 
         public MainWindow()
         {
             InitializeComponent();
             InitializeInterface();
+            InitializeData();
         }
 
         public MainWindow(User? user = null)
@@ -32,6 +40,87 @@ namespace UI.Views
             InitializeComponent();
             _currentUser = user;
             InitializeInterface();
+            InitializeData();
+        }
+
+        private void InitializeData()
+        {
+            //Dang dung stackpanel nen bi nguoc
+            conversations = conversationService.GetAllConversations().OrderByDescending(comparer => comparer.UpdatedAt).ToList();
+            // Clear existing items
+            spConversations.Children.Clear();
+
+            // Add header again
+            var header = new TextBlock
+            {
+                Text = "Recent Conversations",
+                Foreground = new SolidColorBrush(Color.Parse("#B0B0B0")),
+                FontSize = 12,
+                FontWeight = FontWeight.Medium,
+                Margin = new Thickness(12, 8, 12, 12)
+            };
+
+            spConversations.Children.Add(header);
+
+            if (conversations == null || !conversations.Any())
+            {
+                // Show placeholder when no data
+                var emptyText = new TextBlock
+                {
+                    Text = "No conversations yet.",
+                    Foreground = new SolidColorBrush(Color.Parse("#888888")),
+                    FontSize = 12,
+                    Margin = new Thickness(12, 8, 12, 12)
+                };
+                spConversations.Children.Add(emptyText);
+                return;
+            }
+
+            foreach (var conv in conversations)
+            {
+                // Outer container
+                var border = new Border
+                {  
+                    Background = new SolidColorBrush(Color.Parse("#2A2A2A")),
+                    Margin = new Thickness(0, 0, 0, 8), 
+                    Child = new StackPanel
+                    {
+                        Children =
+                {
+                    new TextBlock
+                    {
+                        Text = conv.Title ?? "(Untitled)",
+                        Foreground = Brushes.White,
+                        FontSize = 13,
+                        TextTrimming = TextTrimming.CharacterEllipsis
+                    },
+                    new TextBlock
+                    {
+                        Text = FormatTimeAgo(conv.UpdatedAt), 
+                        Foreground = new SolidColorBrush(Color.Parse("#888888")),
+                        FontSize = 11,
+                        Margin = new Thickness(0,2,0,0)
+                    }
+                }
+                    }
+                };
+                border.Classes.Add("ConversationItemStyle");
+                spConversations.Children.Add(border);
+            }
+        }
+
+        private string FormatTimeAgo(DateTime updatedAt)
+        {
+            DateTime currentTime = DateTime.Now;
+            var span = currentTime - updatedAt;
+
+            if (span.TotalMinutes < 1) return "Just now";
+            else if (span.TotalMinutes < 60) return $"{(int)span.TotalMinutes} minutes ago";
+            else if (span.TotalHours < 24) return $"{(int)span.TotalHours} hours ago";
+            else if (span.TotalDays < 7) return $"{(int)span.TotalDays} days ago";
+            else if (span.TotalDays < 30) return $"{(int)(span.TotalDays / 7)} weeks ago";
+            else if (span.TotalDays < 365) return $"{(int)(span.TotalDays / 30)} months ago";
+            else return $"{(int)(span.TotalDays / 365)} years ago";
         }
 
         private void InitializeInterface()
@@ -110,6 +199,7 @@ namespace UI.Views
             {
                 _isProcessingMessage = false;
                 btnSend.IsEnabled = true;
+                txtTime.Text = DateTime.Now.ToString("hh:mm tt");
             }
         }
 
