@@ -168,7 +168,7 @@
 				</StackPanel>
 
 				<ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="8,0">
-					<StackPanel x:Name="spConversations">
+					<StackPanel x:Name="spConversations" PointerPressed="ConversationChild_onClick">
 						<TextBlock Text="Recent Conversations"
 								   Foreground="#B0B0B0"
 								   FontSize="12"

@@ -27,7 +27,8 @@ namespace UI.Views
         private bool _isProcessingMessage = false;
         private List<Conversation> conversations = new List<Conversation>();
         private ConversationService conversationService = new ConversationService();
-
+        private MessageService messageService = new MessageService();
+        private List<Message> messages = new List<Message>();
         public MainWindow()
         {
             InitializeComponent();
@@ -104,6 +105,8 @@ namespace UI.Views
                 }
                     }
                 };
+
+                border.PointerPressed += ConversationChild_onClick;
                 border.Classes.Add("ConversationItemStyle");
                 spConversations.Children.Add(border);
             }
@@ -236,7 +239,12 @@ namespace UI.Views
             userMessagePanel.Children.Add(userAvatar);
 
             spMessages.Children.Add(userMessagePanel);
-            ScrollToEnd();
+
+            Dispatcher.UIThread.Post(() =>
+            {
+                double targetY = Math.Max(0, svChat.Extent.Height - svChat.Viewport.Height + 50);
+                svChat.Offset = new Vector(0, targetY);
+            }, DispatcherPriority.Background);
         }
 
         private StackPanel ShowTypingIndicator()
@@ -389,6 +397,24 @@ namespace UI.Views
                 {
                     btnSend_Click(sender, e);
                 }
+            }
+        }
+
+        private void ConversationChild_onClick(object? sender, RoutedEventArgs e)
+        {
+            if (sender is Border border && border.Child is StackPanel stackPanel && stackPanel.Children[0] is TextBlock textBlock)
+            {
+                string conversationTitle = textBlock.Text;
+                ClearChat();
+
+                messages = messageService.GetMessagesByConversationId(conversations.FirstOrDefault(c => c.Title == conversationTitle)?.ConversationId ?? 0);
+                
+                for (int i = 0; i < messages.Count; i++)
+                {
+                    AddUserMessage(messages[i].UserMessage ?? "");
+                    AddBotMessage(messages[i].ChatResponse ?? "");
+                }
+                
             }
         }
 
