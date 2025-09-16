@@ -163,8 +163,9 @@
 				</Grid.RowDefinitions>
 
 				<StackPanel Grid.Row="0" Margin="16,20">
-					<Button Content="+ New Chat"
-							Classes="NewChatButtonStyle"/>
+					<Button x:Name="btnNewChat" Content="+ New Chat"
+							Classes="NewChatButtonStyle"
+							PointerPressed="btnChat_Click"/>
 				</StackPanel>
 
 				<ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="8,0">

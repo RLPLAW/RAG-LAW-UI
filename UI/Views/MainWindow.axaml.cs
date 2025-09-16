@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,6 +35,7 @@ namespace UI.Views
             InitializeComponent();
             InitializeInterface();
             InitializeData();
+            InitializeButton();
         }
 
         public MainWindow(User? user = null)
@@ -42,6 +44,12 @@ namespace UI.Views
             _currentUser = user;
             InitializeInterface();
             InitializeData();
+            InitializeButton();
+        }
+
+        private void InitializeButton()
+        {
+            btnNewChat.Click += btnChat_Click;
         }
 
         private void InitializeData()
@@ -173,6 +181,24 @@ namespace UI.Views
 
         private async void btnSend_Click(object sender, RoutedEventArgs e)
         {
+            int conversationId = 0;
+            if (spMessages.Children.Count == 0)
+            {
+                string summary = SummarizeContent(txtbMessageInput.Text);
+
+                conversationService.CreateConversation(new Conversation
+                {
+                    UserId = _currentUser?.UserId ?? 1,
+                    Title = SummarizeContent(summary),
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now,
+                    IsActive = true
+                });
+
+                conversationId = conversationService.GetAllConversations().OrderByDescending(c => c.ConversationId).FirstOrDefault()?.ConversationId ?? 0;
+
+                InitializeData();
+            }
             if (_isProcessingMessage) return;
 
             string message = txtbMessageInput.Text?.Trim() ?? string.Empty;
@@ -197,6 +223,18 @@ namespace UI.Views
 
                 string botResponse = await RetrieveAnswerAsync(message);
                 AddBotMessage(botResponse);
+
+                messageService.CreateMessage(new Message
+                {
+                    UserMessage = message,
+                    ChatResponse = botResponse,
+                    TimeStamp = DateTime.Now,
+                    ConversationId = conversationId
+                });
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error processing message: {ex.Message}");
             }
             finally
             {
@@ -204,6 +242,16 @@ namespace UI.Views
                 btnSend.IsEnabled = true;
                 txtTime.Text = DateTime.Now.ToString("hh:mm tt");
             }
+        }
+
+        private string SummarizeContent(string? text)
+        {
+            if (string.IsNullOrWhiteSpace(text)) return "New Conversation";
+
+            var words = text.Split(new[] { ' ', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+
+            var summary = string.Join(" ", words.Take(5));
+            return summary.Length <= 30 ? summary : summary.Substring(0, 30) + "...";
         }
 
         private void AddUserMessage(string message)
@@ -240,11 +288,7 @@ namespace UI.Views
 
             spMessages.Children.Add(userMessagePanel);
 
-            Dispatcher.UIThread.Post(() =>
-            {
-                double targetY = Math.Max(0, svChat.Extent.Height - svChat.Viewport.Height + 50);
-                svChat.Offset = new Vector(0, targetY);
-            }, DispatcherPriority.Background);
+            ScrollToEnd();
         }
 
         private StackPanel ShowTypingIndicator()
@@ -323,6 +367,7 @@ namespace UI.Views
             botMessagePanel.Children.Add(messageBubble);
 
             spMessages.Children.Add(botMessagePanel);
+
             ScrollToEnd();
         }
 
@@ -350,13 +395,20 @@ namespace UI.Views
             return avatar;
         }
 
-        private void ScrollToEnd()
+        private async void ScrollToEnd()
         {
-            // Use Dispatcher to ensure UI updates are complete before scrolling
-            Dispatcher.UIThread.Post(() =>
+            if (svChat != null)
             {
-                svChat?.ScrollToEnd();
-            }, Avalonia.Threading.DispatcherPriority.Render);
+                EventHandler? layoutHandler = null;
+                layoutHandler = (sender, args) =>
+                {
+                    svChat.LayoutUpdated -= layoutHandler;
+                    svChat.ScrollToEnd();
+                };
+
+                svChat.LayoutUpdated += layoutHandler;
+                svChat.InvalidateVisual();
+            }
         }
 
         private async Task<string> RetrieveAnswerAsync(string userMessage)
@@ -414,8 +466,15 @@ namespace UI.Views
                     AddUserMessage(messages[i].UserMessage ?? "");
                     AddBotMessage(messages[i].ChatResponse ?? "");
                 }
-                
             }
+        }
+
+        private void btnChat_Click(object? sender, RoutedEventArgs e)
+        {
+            ClearChat();
+            txtbMessageInput.Text = string.Empty;
+            SetPlaceholderText();
+            Debug.WriteLine("chat");
         }
 
         // Optional: Add method to clear chat
